@@ -129,9 +129,23 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 				Subtitle: "--",
 			}))
 		// Put data into instance
-		line.SetXAxis( generatetimeline(temp_query_date)).
+/*		line.SetXAxis( generatetimeline(temp_query_date)).
 			AddSeries("Category A", generateLineItems(temp_query_val)).
 			SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
+*/
+		line.SetXAxis( generatetimeline(temp_query_date)).
+			AddSeries("Category A", generateLineItems(temp_query_val)).
+			SetSeriesOptions(
+                                 charts.WithLabelOpts(opts.Label{
+                                         Show: true,
+                                 }),
+                                 charts.WithAreaStyleOpts(opts.AreaStyle{
+                                         Opacity:0.2,
+                                 }),
+                                 charts.WithLineChartOpts(opts.LineChart{
+                                         Smooth: true,
+                                 }),
+                        )
 		line.Render(w)
 	}else  if cat =="light"{
 
