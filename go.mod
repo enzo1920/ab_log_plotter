@@ -1,4 +1,4 @@
-module ab_log_ploter
+module ab_log_plotter
 
 go 1.16
 
