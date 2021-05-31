@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	_ "github.com/lib/pq"
-        "ab_log_ploter/configer"
+        "ab_log_plotter/configer"
 )
 
 
