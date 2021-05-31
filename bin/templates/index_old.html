@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Relays</title>
+    </head>
+    <body>
+        <table>
+            <thead><th>Id</th><th>Ip</th><th>State</th></thead>
+            {{range . }}
+            <tr>
+                <td>{{.R_id}}</td>
+                <td>{{.R_ip}}</td>
+                <td>{{.R_state}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

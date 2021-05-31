@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <style>
+          table.GeneratedTable {
+             width: 100%;
+             background-color: #ffffff;
+             border-collapse: collapse;
+             border-width: 2px;
+             border-color: #080808;
+             border-style: solid;
+             color: #000000;
+          }
+
+          table.GeneratedTable td, table.GeneratedTable th {
+             border-width: 2px;
+             border-color: #080808;
+             border-style: solid;
+             padding: 3px;
+          }
+
+          table.GeneratedTable thead {
+              background-color: #d4efbd;
+          }
+        </style>
+
+
+        <meta charset="UTF-8">
+        <title>Relays</title>
+    </head>
+    <body>
+        <table>
+            <table class="GeneratedTable">
+			  <thead>
+				<tr>
+				  <th>Id</th>
+				  <th>IP</th>
+				  <th>State</th>
+				</tr>
+			  </thead>
+            {{range . }}
+            <tr>
+                <td>{{.R_id}}</td>
+                <td>{{.R_ip}}</td>
+                <td>{{.R_state}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>
