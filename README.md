@@ -1,13 +1,30 @@
-# ab_log_inserter
+# ab_log_plotter
 
-##Create db and table
+##Построитель графиков из бд postgres
+Программа предназначена для отображения значений датчиков, получаемых с контроллера [ab-log mega-d 2561](https://ab-log.ru/smart-house/ethernet/megad-2561)
+К основному модулю программы(main.go) подключаются:
+- модуль для инициализации подключения к бд
+- модуль для работы с конфигурационном файлом(файл в формате json)
 
+Пути:
+/light/ (отображение графика освещенности за 72 часа)
+
+/temp/ (отображение графика температуры за 72 часа)
+
+/relays/ (отображает состояние реле (вкл/выкл))
+
+##Запуск
+Запускается как web-server на 80 порту.
+Используя screen:
 ```
- CREATE DATABASE ab_log_db;
+screen -S plotter_session
+./ab_log_grapher
+```
+##Log
+Записывается в папку ./log
 
-CREATE TABLE light (
-    light_id serial not null primary key,
-    light_val float  NOT NULL,
-    light_date  timestamp default NULL
-);
+#Make
+Для компиляции под raspberry pi используется комманда:
+```
+make rasp 
 ```
