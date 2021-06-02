@@ -36,4 +36,4 @@ linux:
 rasp:
 	@$(CGO_ENABLED) $(ENV_ARM) $(CMD_BUILD) $(DIR)/$(APP)
 clean:
-			rm -r $(DIR)
+			rm -r $(DIR)/$(APP)
