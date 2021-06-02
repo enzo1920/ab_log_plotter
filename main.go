@@ -113,11 +113,11 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
         cat := vars["category"]
         temp_query_date :=  "SELECT w_date FROM weather WHERE w_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY w_date asc"
         temp_query_val  :=  "SELECT temp_val FROM weather WHERE w_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY w_date asc"
-        temp_title := "Значение датчика освещения д.Новая Слободка"
+        temp_title := "График датчика температуры д.Новая Слободка"
 
         light_query_date := "SELECT light_date FROM light WHERE  light_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY light_date asc"
         light_query_val  := "SELECT light_val FROM light WHERE light_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY light_date asc"
-        light_title := "Значение датчика температуры  д.Новая Слободка"
+        light_title := "График датчика освещения  д.Новая Слободка"
         if cat == "temp"{
 		// create a new line instance
 		line := charts.NewLine()
@@ -165,13 +165,14 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 		line.Render(w)
         }else if cat == "relays"{
 		getstate:= getRelaystate()
+                fmt.Println(getstate)
 		tmpl, err := template.ParseFiles("templates/index.html")
 		if  err != nil {
                    log.Println(err)
 		}
 		err=tmpl.Execute(w, getstate)
 		if  err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
         }
 
@@ -186,7 +187,7 @@ func checkErr(err error) {
         }
     }
 /****************************** Relays *******************************************/
-
+/*
 //шаблонизатор отображения странички с состоянием реле
 func showRelays(w http.ResponseWriter, r *http.Request) {
         getstate:= getRelaystate()
@@ -200,7 +201,7 @@ func showRelays(w http.ResponseWriter, r *http.Request) {
         }
 
 }
-
+*/
 
 
 
@@ -219,7 +220,7 @@ func getRelaystate() []LightRelays {
              lr := LightRelays{}
              err := rows.Scan(&lr.R_id, &lr.R_ip, &lr.R_state)
              if err != nil{
-                  fmt.Println(err)
+                  log.Println(err)
                   continue
              }
              lightrelays = append(lightrelays, lr)
@@ -246,7 +247,7 @@ func main() {
             log.Fatal(err)
      }
 
-     fmt.Println(dir)
+     //log.Println(dir)
      cfg := Config_reader(filepath.Join(dir,"ploter.conf"))
      models.Initdb(cfg)
 
