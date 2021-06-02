@@ -40,6 +40,7 @@ Description=ab-log plotter
 After=multi-user.target
 
 [Service]
+WorkingDirectory=/home/ab_log_plotter/bin
 ExecStart=/home/ab_log_plotter/bin/ab_log_grapher
 
 [Install]
