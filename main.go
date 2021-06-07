@@ -118,6 +118,13 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
         light_query_date := "SELECT light_date FROM light WHERE  light_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY light_date asc"
         light_query_val  := "SELECT light_val FROM light WHERE light_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY light_date asc"
         light_title := "График датчика освещения  д.Новая Слободка"
+
+        temprasp_query_date :=  "SELECT r_date FROM rasp_weather WHERE r_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY r_date asc"
+        temprasp_query_val  :=  "SELECT temp_val FROM rasp_weather WHERE r_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY r_date asc"
+        temprasp_title := "График датчика температуры Raspberry  д.Новая Слободка"
+
+
+
         if cat == "temp"{
 		// create a new line instance
 		line := charts.NewLine()
@@ -147,7 +154,38 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
                                  }),
                         )
 		line.Render(w)
-	}else  if cat =="light"{
+	}else if cat == "temprasp"{
+		// create a new line instance
+		line := charts.NewLine()
+		// set some global options like Title/Legend/ToolTip or anything else
+		line.SetGlobalOptions(
+			charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
+			charts.WithTitleOpts(opts.Title{
+				Title:    temprasp_title,
+				Subtitle: "--",
+			}))
+		// Put data into instance
+/*		line.SetXAxis( generatetimeline(temp_query_date)).
+			AddSeries("Category A", generateLineItems(temp_query_val)).
+			SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
+*/
+		line.SetXAxis( generatetimeline(temprasp_query_date)).
+			AddSeries("Category A", generateLineItems(temprasp_query_val)).
+			SetSeriesOptions(
+                                 charts.WithLabelOpts(opts.Label{
+                                         Show: true,
+                                 }),
+                                 charts.WithAreaStyleOpts(opts.AreaStyle{
+                                         Opacity:0.2,
+                                 }),
+                                 charts.WithLineChartOpts(opts.LineChart{
+                                         Smooth: true,
+                                 }),
+                        )
+		line.Render(w)
+	
+          
+        }else  if cat =="light"{
 
 		// create a new line instance
 		line := charts.NewLine()
