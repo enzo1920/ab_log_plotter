@@ -115,6 +115,10 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
         temp_query_val  :=  "SELECT temp_val FROM weather WHERE w_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY w_date asc"
         temp_title := "График датчика температуры д.Новая Слободка"
 
+        press_query_date :=  "SELECT p_date FROM pressure WHERE p_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY p_date asc"
+        press_query_val  :=  "SELECT p_val FROM pressure WHERE p_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY p_date asc"
+        press_title := "График датчика давления д.Новая Слободка"
+
         light_query_date := "SELECT light_date FROM light WHERE  light_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY light_date asc"
         light_query_val  := "SELECT light_val FROM light WHERE light_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY light_date asc"
         light_title := "График датчика освещения  д.Новая Слободка"
@@ -212,7 +216,36 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 		if  err != nil {
 			log.Println(err)
 		}
-        }
+        }else  if cat == "press"{
+		// create a new line instance
+		line := charts.NewLine()
+		// set some global options like Title/Legend/ToolTip or anything else
+		line.SetGlobalOptions(
+			charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
+			charts.WithTitleOpts(opts.Title{
+				Title:    press_title,
+				Subtitle: "--",
+			}))
+		// Put data into instance
+/*		line.SetXAxis( generatetimeline(temp_query_date)).
+			AddSeries("Category A", generateLineItems(temp_query_val)).
+			SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
+*/
+		line.SetXAxis( generatetimeline(press_query_date)).
+			AddSeries("Category A", generateLineItems(press_query_val)).
+			SetSeriesOptions(
+                                 charts.WithLabelOpts(opts.Label{
+                                         Show: true,
+                                 }),
+                                 charts.WithAreaStyleOpts(opts.AreaStyle{
+                                         Opacity:0.2,
+                                 }),
+                                 charts.WithLineChartOpts(opts.LineChart{
+                                         Smooth: true,
+                                 }),
+                        )
+		line.Render(w)
+	}
 
 }
 
