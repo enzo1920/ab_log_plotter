@@ -25,6 +25,7 @@ type LightRelays struct{
     R_id int
     R_ip string
     R_state int
+    R_update string
 }
 
 
@@ -115,8 +116,8 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
         temp_query_val  :=  "SELECT temp_val FROM weather WHERE w_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY w_date asc"
         temp_title := "График датчика температуры д.Новая Слободка"
 
-        press_query_date :=  "SELECT p_date FROM pressure WHERE p_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY p_date asc"
-        press_query_val  :=  "SELECT p_val FROM pressure WHERE p_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY p_date asc"
+        press_query_date :=  "SELECT p_date FROM pressure WHERE p_date BETWEEN NOW()- INTERVAL '720 HOURS' AND NOW()  ORDER BY p_date asc"
+        press_query_val  :=  "SELECT p_val FROM pressure WHERE p_date BETWEEN NOW() - INTERVAL '720 HOURS' AND NOW()  order BY p_date asc"
         press_title := "График датчика давления д.Новая Слободка"
 
         light_query_date := "SELECT light_date FROM light WHERE  light_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY light_date asc"
@@ -279,7 +280,7 @@ func showRelays(w http.ResponseWriter, r *http.Request) {
 //получаем состояние реле
 func getRelaystate() []LightRelays {
 
-        rows, err := models.Db.Query("SELECT r_id, r_ip, r_state FROM relays WHERE r_type=1  ORDER BY r_id asc")
+        rows, err := models.Db.Query("SELECT r_id, r_ip, r_state, to_char(r_last_update, 'HH24:MI:SS DD Mon YYYY')  FROM relays WHERE r_type=1  ORDER BY r_id asc")
         if err != nil {
              log.Fatal(err)
         }
@@ -289,7 +290,7 @@ func getRelaystate() []LightRelays {
 
         for rows.Next(){
              lr := LightRelays{}
-             err := rows.Scan(&lr.R_id, &lr.R_ip, &lr.R_state)
+             err := rows.Scan(&lr.R_id, &lr.R_ip, &lr.R_state,&lr.R_update)
              if err != nil{
                   log.Println(err)
                   continue

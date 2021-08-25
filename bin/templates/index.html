@@ -36,6 +36,7 @@
 				  <th>Id</th>
 				  <th>IP</th>
 				  <th>State</th>
+				  <th>Update</th>
 				</tr>
 			  </thead>
             {{range . }}
@@ -43,6 +44,7 @@
                 <td>{{.R_id}}</td>
                 <td>{{.R_ip}}</td>
                 <td>{{.R_state}}</td>
+                <td>{{.R_update}}</td>
             </tr>
             {{end}}
         </table>
