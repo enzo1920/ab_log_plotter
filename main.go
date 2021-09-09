@@ -116,8 +116,8 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
         temp_query_val  :=  "SELECT temp_val FROM weather WHERE w_date BETWEEN NOW() - INTERVAL '72 HOURS' AND NOW()  order BY w_date asc"
         temp_title := "График датчика температуры д.Новая Слободка"
 
-        press_query_date :=  "SELECT p_date FROM pressure WHERE p_date BETWEEN NOW()- INTERVAL '720 HOURS' AND NOW()  ORDER BY p_date asc"
-        press_query_val  :=  "SELECT p_val FROM pressure WHERE p_date BETWEEN NOW() - INTERVAL '720 HOURS' AND NOW()  order BY p_date asc"
+        press_query_date :=  "SELECT TO_TIMESTAMP(TO_CHAR(p_date,'HH24:MI:SS DD-MM-YYYY'),'HH24:MI:SS DD-MM-YYYY') as p_date FROM pressure WHERE p_date BETWEEN NOW()- INTERVAL '144 HOURS' AND NOW()  ORDER BY p_date asc"
+        press_query_val  :=  "SELECT p_val-700.00  FROM pressure WHERE p_date BETWEEN NOW() - INTERVAL '144 HOURS' AND NOW()  order BY p_date asc"
         press_title := "График датчика давления д.Новая Слободка"
 
         light_query_date := "SELECT light_date FROM light WHERE  light_date BETWEEN NOW()- INTERVAL '72 HOURS' AND NOW()  ORDER BY light_date asc"
@@ -225,13 +225,19 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 			charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
 			charts.WithTitleOpts(opts.Title{
 				Title:    press_title,
-				Subtitle: "--",
-			}))
-		// Put data into instance
-/*		line.SetXAxis( generatetimeline(temp_query_date)).
-			AddSeries("Category A", generateLineItems(temp_query_val)).
-			SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
-*/
+				Subtitle: "",
+			}),
+                charts.WithXAxisOpts(opts.XAxis{
+			Name: "Время",
+			//Type: "category",
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Name: "Давление +700мм.рт.ст",
+			//Type: "value",
+		}),
+
+                )
+
 		line.SetXAxis( generatetimeline(press_query_date)).
 			AddSeries("Category A", generateLineItems(press_query_val)).
 			SetSeriesOptions(
