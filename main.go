@@ -138,7 +138,7 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 			charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
 			charts.WithTitleOpts(opts.Title{
 				Title:    temp_title,
-				Subtitle: "--",
+				Subtitle: getCurrentTemp(),
 			}))
 		// Put data into instance
 /*		line.SetXAxis( generatetimeline(temp_query_date)).
@@ -167,7 +167,7 @@ func getWriter(w http.ResponseWriter, r *http.Request) {
 			charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
 			charts.WithTitleOpts(opts.Title{
 				Title:    temprasp_title,
-				Subtitle: "--",
+				Subtitle:  "--",
 			}))
 		// Put data into instance
 /*		line.SetXAxis( generatetimeline(temp_query_date)).
@@ -280,6 +280,18 @@ func showRelays(w http.ResponseWriter, r *http.Request) {
 
 }
 */
+
+
+func getCurrentTemp()(curTemp string) {
+        var currentTemp float64
+        err := models.Db.QueryRow("SELECT temp_val FROM weather  order BY w_date desc limit 1").Scan(&currentTemp)
+        if err != nil {
+             log.Fatal(err)
+             curTemp = "N/A"
+        }
+        curTemp = fmt.Sprintf("%f",currentTemp)
+        return curTemp
+}
 
 
 
